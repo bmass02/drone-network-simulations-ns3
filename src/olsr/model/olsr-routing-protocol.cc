@@ -188,6 +188,9 @@ RoutingProtocol::GetTypeId (void)
     .AddTraceSource ("RoutingTableChanged", "The OLSR routing table has changed.",
                      MakeTraceSourceAccessor (&RoutingProtocol::m_routingTableChanged),
                      "ns3::olsr::RoutingProtocol::TableChangeTracedCallback")
+    .AddTraceSource ("NeighborSetChanged", "The OLSR routing table has changed causing the neighbor set to change.",
+                     MakeTraceSourceAccessor (&RoutingProtocol::m_neighborSetChanged),
+                     "ns3::olsr::RoutingProtocol::NeighborSetChangeTracedCallback")
   ;
   return tid;
 }
@@ -1216,6 +1219,7 @@ RoutingProtocol::RoutingTableComputation ()
 
   NS_LOG_DEBUG ("Node " << m_mainAddress << ": RoutingTableComputation end.");
   m_routingTableChanged (GetSize ());
+  m_neighborSetChanged (GetObject<Node> (), m_state.GetNeighbors ());
 }
 
 
@@ -3133,5 +3137,3 @@ RoutingProtocol::GetRoutingTableAssociation () const
 
 } // namespace olsr
 } // namespace ns3
-
-

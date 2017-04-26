@@ -135,6 +135,8 @@ public:
    */
   typedef void (* TableChangeTracedCallback) (uint32_t size);
 
+  //Used to implement solution (need an event to trigger calculations)
+  typedef void (* NeighborSetChangeTracedCallback) (Ptr<Node> node, NeighborSet neighbors);
 private:
   std::set<uint32_t> m_interfaceExclusions; //!< Set of interfaces excluded by OSLR.
   Ptr<Ipv4StaticRouting> m_routingTableAssociation; //!< Associations from an Ipv4StaticRouting instance
@@ -768,6 +770,9 @@ private:
   /// Routing table chanes challback
   TracedCallback <uint32_t> m_routingTableChanged;
 
+  // Callback for triggering transmission power calculations
+  TracedCallback <Ptr<Node>,NeighborSet> m_neighborSetChanged;
+  
   /// Provides uniform random variables.
   Ptr<UniformRandomVariable> m_uniformRandomVariable;
 

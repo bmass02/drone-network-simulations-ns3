@@ -528,6 +528,7 @@ DroneExperiment::RecordStats ()
 std::vector<Gnuplot2dDataset>
 DroneExperiment::Run (PowerManagement method, bool dynamicPowerManagement, bool onStateChange)
 {
+  RngSeedManager::ResetStreamIndex ();
   m_method = method;
   m_dynamicPowerManagement = dynamicPowerManagement;
   m_onStateChange = onStateChange;
@@ -557,6 +558,9 @@ DroneExperiment::Run (PowerManagement method, bool dynamicPowerManagement, bool 
 
 int main (int argc, char *argv[])
 {
+  time_t currentTime;
+  time (&currentTime); //Grab current time as seed if no seed is specified
+
   LogComponentEnable("DroneAdhoc", LOG_LEVEL_INFO);
 
   std::string phyMode ("OfdmRate9Mbps");
@@ -580,15 +584,19 @@ int main (int argc, char *argv[])
   cmd.AddValue ("imagePacketSize", "image packet size (MB)", imagePacketSize);
   cmd.AddValue ("imageFrequency", "image packet frequency (seconds)", imageFrequency);
   cmd.AddValue ("onStateChange", "whether to adjust gains while idle.", onStateChange);
+  cmd.AddValue ("seed","seed for the RngSeedManager", currentTime);
 
   cmd.Parse (argc, argv);
+
+  NS_LOG_INFO (std::to_string (currentTime));
+  RngSeedManager::SetSeed (currentTime);
 
   std::string dimensions = std::to_string (maxX) + "x" + std::to_string (maxY);
   std::string size = std::to_string (numDrones);
   std::string control = "";
   if(!onStateChange){ control = "not-"; }
   control += "controlled";
-  std::string signature = dimensions + "-" + size + "-" + control;
+  std::string signature = dimensions + "-" + size + "-" + control + "-" + std::to_string (currentTime);
   Gnuplot packetLoss = Gnuplot ("packet-loss-rate-"+signature+".png");
   Gnuplot throughput = Gnuplot ("data-throughput-"+signature+".png");
   std::vector<Gnuplot2dDataset> datasets = {};

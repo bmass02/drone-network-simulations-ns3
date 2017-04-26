@@ -193,6 +193,8 @@ public:
    */
   Ptr<const Ipv4StaticRouting> GetRoutingTableAssociation () const;
 
+  //Moved to public for use in Collisiion Avoidance Application
+  OlsrState m_state;  //!< Internal state with all needed data structs.
 protected:
   virtual void DoInitialize (void);
 private:
@@ -212,7 +214,7 @@ private:
   Time m_hnaInterval;     //!< HNA messages' emission interval.
   uint8_t m_willingness;  //!<  Willingness for forwarding packets on behalf of other nodes.
 
-  OlsrState m_state;  //!< Internal state with all needed data structs.
+  // OlsrState m_state;  //!< Internal state with all needed data structs.
   Ptr<Ipv4> m_ipv4;   //!< IPv4 object the routing is linked to.
 
   /**

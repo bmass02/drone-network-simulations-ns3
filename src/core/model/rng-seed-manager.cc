@@ -49,7 +49,7 @@ static uint64_t g_nextStreamIndex = 0;
  *
  * This is accessible as "--RngSeed" from CommandLine.
  */
-static ns3::GlobalValue g_rngSeed ("RngSeed", 
+static ns3::GlobalValue g_rngSeed ("RngSeed",
                                    "The global seed of all rng streams",
                                    ns3::IntegerValue(1),
                                    ns3::MakeIntegerChecker<uint32_t> ());
@@ -62,7 +62,7 @@ static ns3::GlobalValue g_rngSeed ("RngSeed",
  *
  * This is accessible as "--RngRun" from CommandLine.
  */
-static ns3::GlobalValue g_rngRun ("RngRun", 
+static ns3::GlobalValue g_rngRun ("RngRun",
                                   "The substream index used for all streams",
                                   ns3::IntegerValue (1),
                                   ns3::MakeIntegerChecker<int64_t> ());
@@ -75,7 +75,7 @@ uint32_t RngSeedManager::GetSeed (void)
   g_rngSeed.GetValue (seedValue);
   return seedValue.Get ();
 }
-void 
+void
 RngSeedManager::SetSeed (uint32_t seed)
 {
   NS_LOG_FUNCTION (seed);
@@ -95,6 +95,11 @@ uint64_t RngSeedManager::GetRun ()
   g_rngRun.GetValue (value);
   int run = value.Get();
   return run;
+}
+
+void RngSeedManager::ResetStreamIndex (void)
+{
+  g_nextStreamIndex = 0;
 }
 
 uint64_t RngSeedManager::GetNextStreamIndex (void)
